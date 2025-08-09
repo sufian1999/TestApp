@@ -7,65 +7,61 @@ export default function ConfirmModal(props: any) {
     let option = props.data
 
     return (
-        <View>
+        <Modal
+            supportedOrientations={['portrait', 'landscape']}
+            transparent={true}
+            visible={props.visible}
+            style={{ flex: 1, width: '100%', height: '100%', }}
+        >
 
-            <Modal
-                supportedOrientations={['portrait', 'landscape']}
-                transparent={true}
-                visible={props.visible}
-                style={{ flex: 1, width: '100%', height: '100%', }}
-            >
+            <TouchableWithoutFeedback onPress={() => props?.unVisibal()}>
 
-                <TouchableWithoutFeedback onPress={() => props?.unVisibal()}>
+                <View style={styles.mainView}>
 
-                    <View style={styles.mainView}>
+                    <TouchableOpacity style={[styles.insideView, { position: 'relative', }]} activeOpacity={1}>
 
-                        <TouchableOpacity style={[styles.insideView, { position: 'relative', }]} activeOpacity={1}>
+                        <TouchableOpacity onPress={() => props.unVisibal()} style={styles.crossIcon}>
 
-                            <TouchableOpacity onPress={() => props.unVisibal()} style={styles.crossIcon}>
-
-                                <Text>X</Text>
-
-                            </TouchableOpacity>
-
-                            <View>
-                                <Text style={[styles.modalTitleText, { fontSize: 12 }]}>{option?.title} <Text style={[styles.modalBodyText, { fontWeight: 'normal', fontSize: 12, color: '#000' }]}>{option?.body1}</Text></Text>
-
-                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={[styles.modalTitleText, { fontSize: 11, color: 'gray', fontWeight: 'normal', left: 5 }]}>{option?.body}</Text>
-                                </View>
-
-                            </View>
-
-                            <TouchableOpacity
-                                style={[styles.btn, { backgroundColor: props.btn1Color ? props.btn1Color : 'red' }]}
-                                onPress={() => props.btn1()}
-                            >
-                                <Text style={styles.btnText}>{option?.btn1}</Text>
-
-                            </TouchableOpacity>
-
-                            {option?.btn2 &&
-
-                                <TouchableOpacity
-                                    style={[styles.btn, { backgroundColor: props.btn2Color ? props.btn2Color : '#E7E7E9' }]}
-                                    onPress={() => props.btn2()}
-                                >
-                                    <Text style={[styles.btnText, { color: props.ButtonTextColor ? props.ButtonTextColor : '#8A8A8A' }]}>{option?.btn2}</Text>
-
-                                </TouchableOpacity>
-
-                            }
+                            <Text>X</Text>
 
                         </TouchableOpacity>
 
-                    </View>
+                        <View>
+                            <Text style={[styles.modalTitleText, { fontSize: 12 }]}>{option?.title} <Text style={[styles.modalBodyText, { fontWeight: 'normal', fontSize: 12, color: '#000' }]}>{option?.body1}</Text></Text>
 
-                </TouchableWithoutFeedback>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={[styles.modalTitleText, { fontSize: 11, color: 'gray', fontWeight: 'normal', left: 5 }]}>{option?.body}</Text>
+                            </View>
 
-            </Modal>
+                        </View>
 
-        </View>
+                        <TouchableOpacity
+                            style={[styles.btn, { backgroundColor: props.btn1Color ? props.btn1Color : 'red' }]}
+                            onPress={() => props.btn1()}
+                        >
+                            <Text style={styles.btnText}>{option?.btn1}</Text>
+
+                        </TouchableOpacity>
+
+                        {option?.btn2 &&
+
+                            <TouchableOpacity
+                                style={[styles.btn, { backgroundColor: props.btn2Color ? props.btn2Color : '#E7E7E9' }]}
+                                onPress={() => props.btn2()}
+                            >
+                                <Text style={[styles.btnText, { color: props.ButtonTextColor ? props.ButtonTextColor : '#8A8A8A' }]}>{option?.btn2}</Text>
+
+                            </TouchableOpacity>
+
+                        }
+
+                    </TouchableOpacity>
+
+                </View>
+
+            </TouchableWithoutFeedback>
+
+        </Modal>
     )
 }
 
