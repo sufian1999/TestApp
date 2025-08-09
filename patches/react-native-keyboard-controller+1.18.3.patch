@@ -1,0 +1,72 @@
+diff --git a/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/modules/statusbar/StatusBarManagerCompatModuleImpl.kt b/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/modules/statusbar/StatusBarManagerCompatModuleImpl.kt
+index 22008fc..ca0f57c 100644
+--- a/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/modules/statusbar/StatusBarManagerCompatModuleImpl.kt
++++ b/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/modules/statusbar/StatusBarManagerCompatModuleImpl.kt
+@@ -9,11 +9,13 @@ import androidx.core.view.WindowInsetsCompat
+ import androidx.core.view.WindowInsetsControllerCompat
+ import com.facebook.react.bridge.ReactApplicationContext
+ import com.facebook.react.bridge.UiThreadUtil
+-import com.reactnativekeyboardcontroller.extensions.rootView
++
+ import com.reactnativekeyboardcontroller.log.Logger
+ import com.reactnativekeyboardcontroller.views.EdgeToEdgeReactViewGroup
+ import java.lang.ref.WeakReference
+ 
++import com.reactnativekeyboardcontroller.views.EdgeToEdgeViewRegistry
++
+ private val TAG = StatusBarManagerCompatModuleImpl::class.qualifiedName
+ 
+ class StatusBarManagerCompatModuleImpl(
+@@ -117,8 +119,7 @@ class StatusBarManagerCompatModuleImpl(
+ 
+   private fun isEnabled(): Boolean = view()?.active ?: false
+ 
+-  private fun view(): EdgeToEdgeReactViewGroup? =
+-    mReactContext.rootView?.findViewWithTag<EdgeToEdgeReactViewGroup>(EdgeToEdgeReactViewGroup.VIEW_TAG)
++private fun view(): EdgeToEdgeReactViewGroup? = EdgeToEdgeViewRegistry.get()
+ 
+   companion object {
+     const val NAME = "StatusBarManager"
+diff --git a/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt b/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt
+index 371d6a9..3faff93 100644
+--- a/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt
++++ b/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt
+@@ -20,8 +20,20 @@ import com.reactnativekeyboardcontroller.listeners.KeyboardAnimationCallbackConf
+ import com.reactnativekeyboardcontroller.log.Logger
+ import com.reactnativekeyboardcontroller.modal.ModalAttachedWatcher
+ 
++import java.lang.ref.WeakReference
++
+ private val TAG = EdgeToEdgeReactViewGroup::class.qualifiedName
+ 
++object EdgeToEdgeViewRegistry {
++  private var lastCreatedView: WeakReference<EdgeToEdgeReactViewGroup>? = null
++
++  fun register(view: EdgeToEdgeReactViewGroup) {
++    lastCreatedView = WeakReference(view)
++  }
++
++  fun get(): EdgeToEdgeReactViewGroup? = lastCreatedView?.get()
++}
++
+ @Suppress("detekt:TooManyFunctions")
+ @SuppressLint("ViewConstructor")
+ class EdgeToEdgeReactViewGroup(
+@@ -58,7 +70,7 @@ class EdgeToEdgeReactViewGroup(
+   private val modalAttachedWatcher = ModalAttachedWatcher(this, reactContext, config, ::getKeyboardCallback)
+ 
+   init {
+-    tag = VIEW_TAG
++    EdgeToEdgeViewRegistry.register(this)
+   }
+ 
+   // region View life cycles
+@@ -242,7 +254,5 @@ class EdgeToEdgeReactViewGroup(
+   }
+   // endregion
+ 
+-  companion object {
+-    val VIEW_TAG = EdgeToEdgeReactViewGroup::class.simpleName
+-  }
++
+ }

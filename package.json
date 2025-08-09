@@ -16,15 +16,19 @@
     "android-app-bundle": "cd android && ./gradlew clean && cd .. && npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle android/app/src/main/res && cd android && ./gradlew bundleRelease && cd ..",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "patch-package",
     "connect-run": "adb reverse tcp:8081 tcp:8081 && npx react-native run-android",
     "info": "npx react-native info",
-    "start-logs": "npx @react-native-community/cli start --client-logs"
+    "start-logs": "npx @react-native-community/cli start --client-logs",
+    "postinstall": "patch-package"
   },
   "dependencies": {
+    "@react-native/new-app-screen": "0.80.2",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "react": "19.1.0",
     "react-native": "0.80.2",
-    "@react-native/new-app-screen": "0.80.2"
+    "react-native-keyboard-controller": "1.18.3",
+    "react-native-reanimated": "3.19.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
